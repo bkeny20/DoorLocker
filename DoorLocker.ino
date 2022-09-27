@@ -4,8 +4,11 @@
 #define ping_Pin 13
 #define echo_Pin 12
 
-#include <Servo.h> 
+#include <Servo.h>
+#include <LiquidCrystal.h>
 
+const int rs = 10, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
 #define Servo_Pin 1
 Servo s;
@@ -15,9 +18,11 @@ long distance(void);
 void lock(void);
 
 void setup() {
- 
     pinMode(echo_Pin, INPUT);
     pinMode(ping_Pin, OUTPUT);
+
+    lcd.begin(16,2);
+    lcd.print("ARMED");
     
     pinMode(Servo_Pin, OUTPUT); //Set servo pin to be an output
     s.attach(Servo_Pin);//attaches servo "s" to the correct pin

@@ -9,6 +9,7 @@
 
 const int rs = 10, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+int status = 0;
 
 #define Servo_Pin 1
 Servo s;
@@ -31,12 +32,19 @@ void setup() {
 }
 
 void loop() {
+  
    if(distance() > 10)
    {
     done = false;
     lock();
    }
-
+  int input = analogRead(A0);
+  if (input>=1020){
+    status = checkInput();
+    lcd.setCursor(0, 1);
+    lcd.print("            ");
+    printStatus(status);
+  }
 
 //------------------------------------------------------------------
 }
@@ -77,4 +85,69 @@ while (!done)
   }
     if (done == true)
     s.write(0);
+}
+
+int checkInput(void){
+  int choice = 0;
+  int previous = 0;
+  int current = 0;
+  int count = 0;
+  int input = 0;
+  while(1){
+    if (count >= 20){
+      break;
+    }
+    input = analogRead(A0);
+    if (input>=1020){
+      current = 1;
+    }
+    else{
+      current = 0;
+    }
+    if (current == 0 && previous == 1){
+      choice = (choice + 1)%4;
+      count = 0;
+    }
+    previous = current;
+    lcd.setCursor(0, 1);
+    lcd.print("            ");
+    lcd.setCursor(0, 1);   
+    switch (choice){
+      case 0:
+        lcd.print("Arm");
+        break;
+      case 1:
+        lcd.print("Disarm 1 min");
+        break;
+      case 2:
+        lcd.print("Disarm 2 min");
+        break;
+      case 3:
+        lcd.print("Disarm 3 min");
+        break;        
+    }
+    delay(200);
+    count++;
+  }
+  return choice;
+}
+
+void printStatus(int status){
+  lcd.setCursor(0, 0);
+  lcd.print("            ");
+  lcd.setCursor(0, 0);
+  switch (status){
+    case 0:
+      lcd.print("AARMED");
+      break;
+    case 1:
+      lcd.print("DISARMED 1 MIN");
+      break;
+    case 2:
+      lcd.print("DISARMED 2 MIN");
+      break;
+    case 3:
+      lcd.print("DISARMED 3 MIN");
+      break;        
+  }
 }

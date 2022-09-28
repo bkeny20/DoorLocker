@@ -53,7 +53,7 @@ void loop() {
         for(int pos = 0; pos <= 180;pos++){ //vary variable "pos" from 0 to 120
           s.write(pos); // write current value of pos to servo
           delay(15);
-        }
+        }s.write(0);
       }
     }
   }
@@ -96,7 +96,7 @@ while (!done)
   {
     if(distance() < 10)
     {
-      delay(5000);
+      delay(3000);
       if(distance() < 10)
       {
       for(int pos = 0; pos <= 180;pos++) //vary variable "pos" from 0 to 120
@@ -122,7 +122,7 @@ int setStatus(void){
   int current = 0; int count = 0;
   int input = 0; int statusChange = 0;
   while(1){
-    if (count >= 20){
+    if (count >= 80){
       break;
     }
     input = analogRead(A0);
@@ -157,7 +157,7 @@ int setStatus(void){
           break;        
       }
     } statusChange = 0;
-    delay(200);
+    delay(50);
     count++;
   }
   return status;
